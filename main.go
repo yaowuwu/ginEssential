@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/viper"
@@ -17,15 +18,17 @@ func main(){
 
 	r := gin.Default()
 	r = CollectRouter(r)
-	//port := viper.GetString("server.port")
-	//if port != ""{
-	//	panic(r.Run(":" + port))
-	//}
+	port := viper.GetString("server.port")
+	fmt.Println(port)
+	if port != ""{
+		panic(r.Run(":" + port))
+	}
 	panic(r.Run())
 }
 
 func InitConfig(){
 	workDir,_ := os.Getwd()
+	fmt.Println(workDir)
 	viper.SetConfigName("application")
 	viper.SetConfigType("yml")
 	viper.AddConfigPath(workDir+"/config")

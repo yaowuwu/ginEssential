@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"hello/ginessential/model"
 	_"github.com/go-sql-driver/mysql"
+	"net/url"
 )
 
 var DB *gorm.DB
@@ -25,13 +26,15 @@ func InitDB() *gorm.DB{
 	username := viper.GetString("datasource.username")
 	password := viper.GetString("datasource.password")
 	charset := viper.GetString("datasource.charset")
-	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
+	loc := viper.GetString("datasource.loc")
+	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s",
 		username,
 		password,
 		host,
 		port,
 		database,
-		charset)
+		charset,
+		url.QueryEscape(loc))
 	db , err := gorm.Open(driverName, args)
 	if err != nil{
 		panic("failed to connect database, err: " + err.Error())

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
@@ -16,9 +17,23 @@ import (
 func Register(ctx *gin.Context){
 	DB := common.GetDB()
 
-	name := ctx.PostForm("name")
-	telephone := ctx.PostForm("telephone")
-	password := ctx.PostForm("password")
+	//使用map 获取请求的参数
+	//var requestUser = make(map[string]string)
+	//json.NewDecoder(ctx.Request.Body).Decode(&requestUser)
+
+	 var requestUser = model.User{}
+	//var requestUser = model.User{}
+	////json.NewDecoder(ctx.Request.Body).Decode(&requestUser)
+	ctx.Bind(&requestUser)
+
+	name := requestUser.Name
+	telephone := requestUser.Telephone
+	password := requestUser.Password
+	fmt.Println("fdasf"+ requestUser.Name)
+
+	//name := ctx.PostForm("name")
+	//telephone := ctx.PostForm("telephone")
+	//password := ctx.PostForm("password")
 
 	if len(telephone) != 11{
 		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "手机号必须为11位")
